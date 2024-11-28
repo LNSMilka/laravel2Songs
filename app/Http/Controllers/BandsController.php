@@ -20,9 +20,17 @@ class BandsController extends Controller
     {
         return view('bands.create');
     }
+
     public function store(Request $request)
     {
-        Bands::create($request->all());
+        $validator = $request->validate([
+            'name' => 'required|string|max:255',
+            'genre' => 'required|string|max:255',
+            'founded' => 'required|integer|min:1900|max:' . date('Y'),
+        ]);
+
+        $band = Bands::create($validator);
+
         return redirect()->route('bands.index');
     }
     public function edit($id)
@@ -39,10 +47,7 @@ class BandsController extends Controller
         ]) ;
 
         $band = Bands::findOrFail($id);
-        $band->name = $request->name;
-        $band->genre = $request->genre;
-        $band->founded = $request->founded;
-        $band->save();
+        $band->update($validator);
         return redirect()->route('bands.index');
     }
     public function destroy($id){

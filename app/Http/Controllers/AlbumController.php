@@ -3,22 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\models\Albums;
+use App\Models\Album;
+use App\Models\Song;
+use App\Models\Band;
 use Illuminate\Support\Facades\Validator;
 
-class AlbumsController extends Controller
+
+class AlbumController extends Controller
 {
     public function index() {
-        $albums = Albums::all();
+        $albums = Album::all();
         return view('albums.index', compact('albums'));
     }
     public function show($id) {
-        $albums = Albums::find($id);
+        $albums = Album::with('band', 'songs')->findorfail($id);
         return view('albums.show', compact('albums'));
     }
     public function create()
     {
-        return view('albums.create');
+        $bands = Band::orderBy('name')->get();
+        return view('albums.create', compact('bands'));
     }
 
 public function store(Request $request)
@@ -27,16 +31,19 @@ public function store(Request $request)
         'name' => 'required|string|max:255',
         'year' => 'required|integer|min:1900|max:' . date('Y'),
         'times_sold' => 'required|integer|min:0|max:1000000000',
+        'band_id' => 'required|integer|exists:bands,id'
     ]);
 
-    $album = Albums::create($validatedData);
+    $album = Album::create($validatedData);
 
     return redirect()->route('albums.index');
-}
+    }
     public function edit($id)
     {
-        $albums = albums::findOrFail($id);
-        return view('albums.edit', compact('albums'));
+        $albums = Album::findOrFail($id);
+        $songs = Song::all();
+        $bands = Band::all();
+        return view('albums.edit', compact('albums', 'songs', 'bands'));
     }
     public function update(Request $request, $id)
     {
@@ -44,13 +51,15 @@ public function store(Request $request)
             'name' => 'required|string|max:255',
             'year' => 'required|integer',
             'times_sold' => 'required|integer',
+            'band_id' => 'required|integer'
         ]) ;
-        $album = Albums::findOrFail($id);
+        $album = Album::findOrFail($id);
         $album->update($validator);
+        $album->songs()->sync($request->input('songs', []));
         return redirect()->route('albums.index');
     }
     public function destroy($id){
-        Albums::destroy($id);
+        Album::destroy($id);
         return redirect()->route('albums.index');
     }
 }

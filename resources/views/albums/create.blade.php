@@ -25,6 +25,15 @@
         <input type="number" name="times_sold" id="times_sold" value="{{ old('times_sold') }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
     </div>
 
+    <div class="mb-4">
+        <label for="band_id" class="block text-gray-700 text-sm font-bold mb-2">Band:</label>
+        <select name="band_id" id="band_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            @foreach($bands as $band)
+                <option value="{{ $band->id }}" {{ old('band_id') == $band->id ? 'selected' : '' }}>{{ $band->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
         Create Album
     </button>

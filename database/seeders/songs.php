@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,35 +14,35 @@ class songs extends Seeder
     {
         DB::table('songs')->insert([
             [
-                'title' => "Fe1n",
-                'singer' => "Jacques Bermon Webster II",
+                'title' => 'Bohemian Rhapsody',
+                'singer' => 'Queen',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => "Father stretch my hands",
-                'singer' => "Kanye West",
+                'title' => 'Back in Black',
+                'singer' => 'AC/DC',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => "bumph heads",
-                'singer' => "Eminem",
+                'title' => 'Highway to Hell',
+                'singer' => 'AC/DC',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => "Surround sound",
-                'singer' => "JID",
+                'title' => 'Master of Puppets',
+                'singer' => 'Metallica',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'title' => "DNA.",
-                'singer' => "Kendrick Lamar",
+                'title' => 'Enter Sandman',
+                'singer' => 'Metallica',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
         ]);
     }
 }

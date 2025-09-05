@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bands;
+use App\Models\Band;
+use App\Models\Album;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class BandsController extends Controller
+class BandController extends Controller
 {
     public function index() {
-        $bands = Bands::all();
-        return view('bands.index', compact('bands'));
+        $band = Band::all();
+        return view('bands.index', compact('band'));
     }
     public function show($id) {
-        $bands = Bands::find($id);
-        return view('bands.show', ['band' => $bands]);
+        $band = Band::with('albums')->findorfail($id);
+        return view('bands.show', compact('band'));
     }
     public function create()
     {
@@ -29,14 +29,15 @@ class BandsController extends Controller
             'founded' => 'required|integer|min:1900|max:' . date('Y'),
         ]);
 
-        $band = Bands::create($validator);
+        $band = Band::create($validator);
 
         return redirect()->route('bands.index');
     }
     public function edit($id)
     {
-        $band = Bands::findOrFail($id);
-        return view('bands.edit', compact('band'));
+        $albums = Album::all();
+        $band = Band::with('albums')->findOrFail($id);
+        return view('bands.edit', compact('band', 'albums'));
     }
     public function update(Request $request, $id)
     {
@@ -44,14 +45,25 @@ class BandsController extends Controller
             'name' => 'required|string|max:255',
             'genre' => 'required|string|max:100',
             'founded' => 'required|integer|min:1900|max:' . date('Y'),
-        ]) ;
+        ]);
 
-        $band = Bands::findOrFail($id);
+        $band = Band::findOrFail($id);
         $band->update($validator);
+
+        $selectedAlbums = $request->input('albums', []);
+
+        Album::where('band_id', $band->id)
+            ->whereNotIn('id', $selectedAlbums)
+            ->update(['band_id' => null]);
+
+        Album::whereIn('id', $selectedAlbums)
+            ->update(['band_id' => $band->id]);
+
         return redirect()->route('bands.index');
     }
+
     public function destroy($id){
-        Bands::destroy($id);
+        Band::destroy($id);
         return redirect()->route('bands.index');
     }
 }

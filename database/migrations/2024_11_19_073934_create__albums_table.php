@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable(false);
             $table->smallInteger('year')->nullable();
             $table->integer('times_sold')->nullable();
+            $table->foreignId('band_id')->constrained()->ondelete('cascade')->nullable(true);
             $table->timestamps();
         });
     }

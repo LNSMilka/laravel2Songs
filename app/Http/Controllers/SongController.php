@@ -22,21 +22,21 @@ class SongController extends Controller
     public function create(Request $request)
     {
         $songsFromAPI = [];
-        // looks if there is a title query parameter
+
         if($request->query->has('title')) {
-            //api key from last.fm
+
             $api_key = '36f4f6e9a445302609cdea9a40cd2db0';
-            // get the title from the query parameter
+
             $title = $request->query('title');
-            // makes a request to last.fm api to search for songs with the given title
+
             $response = Http::get(
                 'http://ws.audioscrobbler.com/2.0/?method=track.search&track=' .
                 $title . '&api_key=' . $api_key . '&format=json'
             )->json();
-            // gets the songs from the response
+
             $songsFromAPI = $response["results"]["trackmatches"]["track"];
         }
-        // returns the create view with the songs from the api
+
         return view('songs.create', compact('songsFromAPI'));
     }
 

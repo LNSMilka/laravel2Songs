@@ -37,7 +37,7 @@
         placeholder="Search songs"
         class="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none"
     />
-    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+    <button type="submit" class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
         Search
     </button>
     <a href="{{ route('songs.create') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-3 rounded">
